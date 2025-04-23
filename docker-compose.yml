@@ -1,0 +1,47 @@
+services:
+  postgres:
+   image: postgres
+   container_name: postgres-hospital-p
+   environment: 
+    POSTGRES_PASSWORD: 123456
+    POSTGRES_USER: postgres
+    POSTGRES_DB: hospital_db
+   ports:
+    - "5433:5432"
+   volumes:
+    - postgres-final:/var/lib/postgresql/data
+   networks:
+    - hospital-network
+  backend:
+   build:
+    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-service
+    dockerfile: Dockerfile
+   container_name: hospital-service-p
+   environment: 
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hospital_db
+   ports:
+    - "9700:9700"
+   depends_on:
+    - postgres
+   networks:
+    - hospital-network
+  frontend:
+   build:
+    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-frontend
+    dockerfile: Dockerfile
+   container_name: hospital-frontend-p
+   ports:
+    - "4200:4200"
+   depends_on:
+    - backend
+   networks:
+    - hospital-network
+networks:
+ hospital-network:
+  external: true
+  name: hospital-network
+volumes:
+  postgres-final:
+   external: true
+   name: postgres-data
+  
