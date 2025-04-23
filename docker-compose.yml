@@ -1,7 +1,8 @@
 services:
   postgres:
    image: postgres
-   container_name: postgres-hospital-p
+   deploy:
+     replicas: 3
    environment: 
     POSTGRES_PASSWORD: 123456
     POSTGRES_USER: postgres
@@ -13,10 +14,14 @@ services:
    networks:
     - hospital-network
   backend:
-   build:
-    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-service
-    dockerfile: Dockerfile
-   container_name: hospital-service-p
+   image: dockerv5-backend
+   deploy:
+     replicas: 3
+     update_config:
+       parallelism: 1
+       delay: 10s
+     restart_policy:
+       condition: on-failure
    environment: 
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hospital_db
    ports:
@@ -26,10 +31,14 @@ services:
    networks:
     - hospital-network
   frontend:
-   build:
-    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-frontend
-    dockerfile: Dockerfile
-   container_name: hospital-frontend-p
+   image: dockerv5-frontend
+   deploy:
+     replicas: 3
+     update_config:
+       parallelism: 1
+       delay: 10s
+     restart_policy:
+       condition: on-failure
    ports:
     - "4200:4200"
    depends_on:
@@ -38,10 +47,7 @@ services:
     - hospital-network
 networks:
  hospital-network:
-  external: true
-  name: hospital-network
+  driver: overlay
 volumes:
   postgres-final:
-   external: true
-   name: postgres-data
   
