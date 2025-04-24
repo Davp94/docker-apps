@@ -2,12 +2,13 @@ services:
   postgres:
    image: postgres
    container_name: postgres-hospital
+   restart: always
    environment: 
     POSTGRES_PASSWORD: 123456
     POSTGRES_USER: postgres
     POSTGRES_DB: hospital_db
    ports:
-    - "5433:5432"
+    - "5432"
    volumes:
     - postgres-final:/var/lib/postgresql/data
    networks:
@@ -17,8 +18,22 @@ services:
     context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-service
     dockerfile: Dockerfile
    container_name: hospital-service
-   environment: 
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hospital_db
+   restart: always
+   deploy:
+     resources:
+       limits:
+         cpus: '2'
+         memory: 500M
+       reservations:
+         cpus: '0.5'
+         memory: 200M
+   healthcheck:
+     test: ["CMD","curl","-f","http://172.31.30.149:9700/"]
+     interval: 20s
+     timeout: 10s
+     retries: 3
+   env_file:
+    - .env 
    ports:
     - "9700:9700"
    depends_on:
@@ -30,8 +45,9 @@ services:
     context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-frontend
     dockerfile: Dockerfile
    container_name: hospital-frontend
+   restart: always
    ports:
-    - "4200:80"
+    - "4200:4200"
    depends_on:
     - backend
    networks:
