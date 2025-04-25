@@ -15,20 +15,12 @@ services:
     - hospital-network
   backend:
    build:
-    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-service
+    context: ./hospital-service/
     dockerfile: Dockerfile
    container_name: hospital-service
    restart: always
-   deploy:
-     resources:
-       limits:
-         cpus: '2'
-         memory: 500M
-       reservations:
-         cpus: '0.5'
-         memory: 200M
    healthcheck:
-     test: ["CMD","curl","-f","http://172.31.30.149:9700/"]
+     test: ["CMD","curl","-f","http://54.227.97.186:9700/"]
      interval: 20s
      timeout: 10s
      retries: 3
@@ -42,7 +34,7 @@ services:
     - hospital-network
   frontend:
    build:
-    context: /home/david/Documents/projects/blumbit/spring-angularv6/hospital-frontend
+    context: ./hospital-frontend
     dockerfile: Dockerfile
    container_name: hospital-frontend
    restart: always
