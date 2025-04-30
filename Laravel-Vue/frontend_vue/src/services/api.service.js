@@ -1,11 +1,11 @@
 import axios from "axios"
 export let BASE_URL; 
-const dev = true;
+const dev = false;
 
 if(dev){
     BASE_URL = "http://127.0.0.1:88";
 }else{
-    BASE_URL = "https://ventaslaravue.blumbit.net/back/public";
+    BASE_URL = "https://34.207.116.193";
 }
 
 export const BASE_URL_API = `${BASE_URL}/api`;
