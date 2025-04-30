@@ -1,0 +1,47 @@
+services:
+  mysql:
+   image: mysql
+   restart: always
+   environment: 
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_USER: root
+    MYSQL_DATABASE: laravel_vue
+   ports:
+    - "3306:3306"
+   volumes:
+    - mysql-final:/var/lib/mysql
+   networks:
+    - laravelvue-network
+  backend:
+   build:
+    context: ./backend_laravel/
+    dockerfile: Dockerfile
+   restart: always
+   networks:
+    - laravelvue-network
+  frontend:
+   build:
+    context: ./frontend_vue
+    dockerfile: Dockerfile
+   restart: always
+   ports:
+    - "3000:3000"
+   networks:
+    - laravelvue-network
+  webserver: 
+    build:
+      context: ./nginx 
+      dockerfile: Dockerfile
+    depends_on:
+     - backend
+     - frontend
+    restart: always
+    ports:
+     - "88:80"
+    networks:
+     - laravelvue-network     
+networks:
+ laravelvue-network:
+volumes:
+  mysql-final:
+  

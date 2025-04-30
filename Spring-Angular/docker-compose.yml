@@ -17,15 +17,14 @@ services:
    build:
     context: ./hospital-service/
     dockerfile: Dockerfile
-   container_name: hospital-service
    restart: always
    healthcheck:
-     test: ["CMD","curl","-f","http://54.227.97.186:9700/"]
+     test: ["CMD","curl","-f","http://localhost:9700/"]
      interval: 20s
      timeout: 10s
      retries: 3
    env_file:
-    - .env 
+    - ./hospital-service/.env 
    ports:
     - "9700:9700"
    depends_on:
@@ -36,10 +35,9 @@ services:
    build:
     context: ./hospital-frontend
     dockerfile: Dockerfile
-   container_name: hospital-frontend
    restart: always
    ports:
-    - "4200:4200"
+    - "4200:80"
    depends_on:
     - backend
    networks:
