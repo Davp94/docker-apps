@@ -5,7 +5,7 @@ const dev = false;
 if(dev){
     BASE_URL = "http://127.0.0.1:88";
 }else{
-    BASE_URL = "https://34.207.116.193";
+    BASE_URL = "https://54.160.160.210";
 }
 
 export const BASE_URL_API = `${BASE_URL}/api`;
