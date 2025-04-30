@@ -1,11 +1,12 @@
 services:
   mysql:
-   image: mysql
+   image: mysql:8.1
    restart: always
    environment: 
     MYSQL_ROOT_PASSWORD: root
-    MYSQL_USER: root
     MYSQL_DATABASE: laravel_vue
+    MYSQL_USER: root1
+    MYSQL_PASSWORD: root1
    ports:
     - "3306"
    volumes:
