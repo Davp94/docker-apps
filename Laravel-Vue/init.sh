@@ -5,6 +5,7 @@ docker compose up -d --build
 docker compose exec -t backend composer install
 docker compose exec -t backend php artisan key:generate
 docker compose exec -t backend php artisan optimize
+sleep 10
 docker compose exec -t backend php artisan migrate:fresh
 docker compose exec -t backend php artisan db:seed
 
